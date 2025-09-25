@@ -10,7 +10,7 @@ if (!process.env.JWT_EXP) {
 }
 export const env = {
   PORT: process.env.PORT || "5000",
-  DB_URL: process.env.MONGODB_URI,
+  MONGODB_URI: process.env.MONGODB_URI,
   JWT_EXP: process.env.JWT_EXP,
   JWT_Secret: process.env.JWT_Secret,
 };
