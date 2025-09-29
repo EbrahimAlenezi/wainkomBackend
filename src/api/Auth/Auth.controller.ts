@@ -2,7 +2,7 @@ import { Request, Response } from "express";
 import bcrypt from "bcrypt";
 import { User } from "../../model/User";
 import { generatetoken } from "../../Utils/jwt";
-
+// Sign up is working
 export const signup = async (req: Request, res: Response) => {
   try {
     const { username, email, password, isOrganizer } = req.body;
@@ -16,7 +16,7 @@ export const signup = async (req: Request, res: Response) => {
       username,
       email,
       password: hashed,
-      isOrganizer: true || false,
+      isOrganizer: isOrganizer || true,
     });
 
     const token = generatetoken(user, user.username);
@@ -26,7 +26,7 @@ export const signup = async (req: Request, res: Response) => {
     res.status(500).json({ error: err });
   }
 };
-
+// Login is working
 export const login = async (req: Request, res: Response) => {
   try {
   const { email, password } = req.body;
