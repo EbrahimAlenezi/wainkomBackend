@@ -1,7 +1,7 @@
 import { Request, Response } from "express";
 import { Event } from "../../model/Event";
 import { User } from "../../model/User";
-
+// Create Event is Working
 export const createEvent = async (req: Request, res: Response) => {
   try {
     const authUser = (req as any).user;
@@ -55,7 +55,7 @@ export const createEvent = async (req: Request, res: Response) => {
     res.status(500).json({ error: err });
   }
 };
-
+// Get Event is Working
 export const getEvents = async (req: Request, res: Response) => {
   try {
     const events = await Event.find();
@@ -66,11 +66,15 @@ export const getEvents = async (req: Request, res: Response) => {
 };
 
 export const getEventByCategory = async (req: Request, res: Response) => {
-  const { categoryId } = req.params;
-  const events = await Event.find({ categoryId });
-  res.status(200).json(events);
+  try {
+    const { categoryId } = req.params;
+    const events = await Event.find({ categoryId });
+    res.status(200).json(events);
+  } catch (err) {
+    res.status(500).json({ error: err });
+  }
 };
-
+// Categories need to be made
 export const updateEvent = async (req: Request, res: Response) => {
   try {
     const { id } = req.params;

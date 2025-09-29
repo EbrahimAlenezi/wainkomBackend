@@ -4,6 +4,7 @@ import dotenv from "dotenv";
 import authRoutes from "./api/Auth/Auth.router";
 import eventRoutes from "./api/Events/Event.router";
 import userRoutes from "./api/User/User.router";
+import categoryRoutes from "./api/Category/Category.router";
 dotenv.config();
 
 const app = express();
@@ -12,6 +13,7 @@ app.use(express.json());
 app.use("/api/auth", authRoutes);
 app.use("/api/events", eventRoutes);
 app.use("/api/user", userRoutes);
+app.use("/api/category", categoryRoutes);
 mongoose.connect(process.env.MONGODB_URI!);
 
 app.listen(8000, () => console.log("Server running"));
