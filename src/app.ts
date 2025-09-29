@@ -1,11 +1,15 @@
 import express from "express";
 import mongoose from "mongoose";
 import dotenv from "dotenv";
-import authRoutes from "../src/Auth/Authrouter";
+import authRoutes from "./api/Auth/Auth.router";
+import eventRoutes from "./api/Events/Event.router";
 dotenv.config();
+
 const app = express();
 app.use(express.json());
+
 app.use("/api/auth", authRoutes);
+app.use("/api/events", eventRoutes);
 mongoose.connect(process.env.MONGODB_URI!);
 
 app.listen(8000, () => console.log("Server running"));
