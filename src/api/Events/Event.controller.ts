@@ -57,8 +57,12 @@ export const createEvent = async (req: Request, res: Response) => {
 };
 
 export const getEvents = async (req: Request, res: Response) => {
-  const events = await Event.find();
-  res.status(200).json(events);
+  try {
+    const events = await Event.find();
+    res.status(200).json(events);
+  } catch (err) {
+    res.status(500).json({ error: err });
+  }
 };
 
 export const getEventByCategory = async (req: Request, res: Response) => {
@@ -68,10 +72,17 @@ export const getEventByCategory = async (req: Request, res: Response) => {
 };
 
 export const updateEvent = async (req: Request, res: Response) => {
-  const { id } = req.params;
-  const { title, description, image, location, date, time } = req.body;
-  const event = await Event.findByIdAndUpdate(id, { title, description, image, location, date, time });
-  res.status(200).json(event);
+  try {
+    const { id } = req.params;
+    const updates = req.body;
+    const event = await Event.findByIdAndUpdate(id, updates, { new: true });
+    if (!event) {
+      return res.status(404).json({ message: "Event not found" });
+    }
+    res.status(200).json(event);
+  } catch (err) {
+    res.status(500).json({ error: err });
+  }
 };
 
 export const deleteEvent = async (req: Request, res: Response) => {
