@@ -1,17 +1,21 @@
-import { Schema, model, Document, Types } from "mongoose";
+import { Schema, model, Types } from "mongoose";
 
 
 
 const UserSchema = new Schema(
   {
-    name: { type: String, required: true },
+    username: { type: String, required: true },
     email: { type: String, required: true, unique: true },
     password: { type: String, required: true },
-    type: { type: String, enum: ["user", "admin","org"], default: "user" },
-    isAdmin: { type: Boolean, default: false },
-    orgId: { type: Schema.Types.ObjectId, ref: "Org" },
+    image: { type: String },
+    bio: { type: String },
+    phone: { type: String },
+    engagements: { type: Schema.Types.ObjectId, ref: "UserEvent" },
+    posts: { type: Schema.Types.ObjectId, ref: "Post" },
+    organization: { type: Schema.Types.ObjectId, ref: "Org" },
+    isOrganizer: { type: Boolean, default: false },
   },
   { timestamps: true }
 );
 
-export default model("User", UserSchema);
+export const User = model("User", UserSchema);

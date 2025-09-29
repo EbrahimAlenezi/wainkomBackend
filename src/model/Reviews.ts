@@ -7,8 +7,9 @@ const ReviewSchema = new Schema(
     eventId: { type: Schema.Types.ObjectId, ref: "Event", required: true },
     userId: { type: Schema.Types.ObjectId, ref: "User", required: true },
     rating: { type: Number, required: true },
-    text: String,
+    comment: { type: String, required: true },
     date: { type: Date, default: Date.now },
+    
   },
   { timestamps: true }
 );
