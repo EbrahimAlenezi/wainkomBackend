@@ -1,11 +1,10 @@
 import { Request, Response } from "express";
 import { User } from "../../model/User";
 
-export const getUser = async (req: Request, res: Response) => {
+export const getUsers = async (req: Request, res: Response) => {
   try {
-    const { userId } = req.body;
-    const user = await User.findById(userId);
-    res.status(200).json(user);
+    const users = await User.find();
+    res.status(200).json(users);
   } catch (err) {
     res.status(500).json({ error: err });
   }
@@ -31,3 +30,4 @@ export const deleteAllUsers = async (req: Request, res: Response) => {
   await User.deleteMany();
   res.status(200).json({ msg: "All users deleted" });
 };
+

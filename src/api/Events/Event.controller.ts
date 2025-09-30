@@ -1,22 +1,19 @@
 import { Request, Response } from "express";
 import { Event } from "../../model/Event";
-import { User } from "../../model/User";
+import { Org } from "../../model/Organizer";
 // Create Event is Working
 export const createEvent = async (req: Request, res: Response) => {
   try {
-    const authUser = (req as any).user;
-    if (!authUser || !authUser._id) {
+    const authorg = (req as any).user;
+    if (!authorg || !authorg._id) {
       return res.status(401).json({ message: "Unauthorized" });
     }
 
-    const user = await User.findById(authUser._id);
+    const user = await Org.findById(authorg._id);
     if (!user) {
       return res.status(401).json({ message: "Unauthorized" });
     }
 
-    if (user.isOrganizer !== true) {
-      return res.status(403).json({ message: "User is not an organizer" });
-    }
 
     const { title, description, image, location, date, time, duration, categoryId } = req.body;
 
@@ -74,7 +71,7 @@ export const getEventByCategory = async (req: Request, res: Response) => {
     res.status(500).json({ error: err });
   }
 };
-// Categories need to be made
+
 export const updateEvent = async (req: Request, res: Response) => {
   try {
     const { id } = req.params;
