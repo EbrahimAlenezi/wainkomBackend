@@ -31,6 +31,8 @@ export const createOrganizer = async (req: Request, res: Response) => {
       phone, 
       website 
     });
+    
+    await user.updateOne({ $set: { organization: organizer._id } });
     res.status(201).json(organizer);
  } catch (error) {
     res.status(500).json({ error: error });

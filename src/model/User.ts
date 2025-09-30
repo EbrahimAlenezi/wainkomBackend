@@ -18,4 +18,17 @@ const UserSchema = new Schema(
   { timestamps: true }
 );
 
-export const User = model("User", UserSchema);
+interface UserDoc extends Document {
+  username: string;
+  email: string;
+  password: string;
+  image: string;
+  bio: string;
+  phone: string;
+  engagements: Types.ObjectId;
+  posts: Types.ObjectId;
+  organization: Types.ObjectId;
+  isOrganizer: boolean;
+}
+
+export const User = model<UserDoc>("User", UserSchema);
