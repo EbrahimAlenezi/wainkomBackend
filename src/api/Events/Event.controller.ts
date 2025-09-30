@@ -86,7 +86,7 @@ export const getEvents = async (req: Request, res: Response) => {
     res.status(500).json({ error: err });
   }
 };
-// Working
+
 export const getEventByCategory = async (req: Request, res: Response) => {
   try {
     const { categoryId } = req.params;

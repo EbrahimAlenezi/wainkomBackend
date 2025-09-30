@@ -5,17 +5,10 @@ import authRoutes from "./api/Auth/Auth.router";
 import eventRoutes from "./api/Events/Event.router";
 import userRoutes from "./api/User/User.router";
 import categoryRoutes from "./api/Category/Category.router";
-import organizerRoutes from "./api/Organizer/Organizer.router";
-dotenv.config();
 
+dotenv.config();
 const app = express();
 app.use(express.json());
-
-// Debug middleware to see all requests
-app.use((req, res, next) => {
-  console.log(`${req.method} ${req.url}`);
-  next();
-});
 
 app.use("/api/auth", authRoutes);
 app.use("/api/events", eventRoutes);
