@@ -1,5 +1,6 @@
 import { Request, Response } from "express";
 import { Event } from "../../model/Event";
+import { Org } from "../../model/Organizer";
 import { User } from "../../model/User";
 // Create Event is Working
 export const createEvent = async (req: Request, res: Response) => {
@@ -9,14 +10,22 @@ export const createEvent = async (req: Request, res: Response) => {
       return res.status(401).json({ message: "Unauthorized" });
     }
 
+    // Check if user exists and is an organizer
     const user = await User.findById(authUser._id);
     if (!user) {
       return res.status(401).json({ message: "Unauthorized" });
     }
 
     if (user.isOrganizer !== true) {
-      return res.status(403).json({ message: "User is not an organizer" });
+      return res.status(403).json({ message: "Only organizers can create events" });
     }
+
+    // Find the organizer profile for this user
+    const organizer = await Org.findOne({ owner: authUser._id });
+    if (!organizer) {
+      return res.status(403).json({ message: "Organizer profile not found. Please create your organizer profile first." });
+    }
+
 
     const { title, description, image, location, date, time, duration, categoryId } = req.body;
 
@@ -47,15 +56,28 @@ export const createEvent = async (req: Request, res: Response) => {
       date: eventDate,
       time,
       duration,
-      orgId: user._id,
+      orgId: organizer._id,
       categoryId: categoryId,
     });
+
+    // Add the event to the organizer's events array
+    const updatedOrg = await Org.findByIdAndUpdate(
+      organizer._id,
+      { $push: { events: event._id } },
+      { new: true }
+    );
+
+    console.log("Event created:", event._id);
+    console.log("Event title:", event.title);
+    console.log("Organizer ID:", organizer._id);
+    console.log("Organizer events after update:", updatedOrg?.events);
+
     res.status(201).json(event);
   } catch (err) {
     res.status(500).json({ error: err });
   }
 };
-// Get Event is Working
+// Working
 export const getEvents = async (req: Request, res: Response) => {
   try {
     const events = await Event.find();
@@ -64,7 +86,6 @@ export const getEvents = async (req: Request, res: Response) => {
     res.status(500).json({ error: err });
   }
 };
-
 
 export const getEventByCategory = async (req: Request, res: Response) => {
   try {
@@ -75,7 +96,7 @@ export const getEventByCategory = async (req: Request, res: Response) => {
     res.status(500).json({ error: err });
   }
 };
-// Categories need to be made
+// Working
 export const updateEvent = async (req: Request, res: Response) => {
   try {
     const { id } = req.params;
@@ -89,19 +110,19 @@ export const updateEvent = async (req: Request, res: Response) => {
     res.status(500).json({ error: err });
   }
 };
-
+// needs testing
 export const deleteEvent = async (req: Request, res: Response) => {
   const { id } = req.params;
   await Event.findByIdAndDelete(id);
   res.status(200).json({ message: "Event deleted" });
 };
-
+// needs testing
 export const getEventsByOrg = async (req: Request, res: Response) => {
   const { orgId } = req.params;
   const events = await Event.find({ orgId });
   res.status(200).json(events);
 }; 
-
+// needs testing
 export const savedEvent = async (req: Request, res: Response) => {
   const { id } = req.params;
   const { userId } = req.body;
@@ -109,3 +130,12 @@ export const savedEvent = async (req: Request, res: Response) => {
   res.status(200).json(event);
 };
 
+export const getEventById = async (req: Request, res: Response) => {
+  try {
+  const { id } = req.params;
+  const event = await Event.findById(id);
+  res.status(200).json(event);
+  } catch (err) {
+    res.status(500).json({ error: err });
+  }
+};
