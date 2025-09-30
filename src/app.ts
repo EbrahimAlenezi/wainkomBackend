@@ -5,6 +5,7 @@ import authRoutes from "./api/Auth/Auth.router";
 import eventRoutes from "./api/Events/Event.router";
 import userRoutes from "./api/User/User.router";
 import categoryRoutes from "./api/Category/Category.router";
+import organizerRoutes from "./api/Organizer/Organizer.router";
 
 dotenv.config();
 const app = express();

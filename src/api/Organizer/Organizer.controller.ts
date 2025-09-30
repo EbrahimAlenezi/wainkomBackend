@@ -7,7 +7,7 @@ import { Event } from "../../model/Event";
 export const createOrganizer = async (req: Request, res: Response) => {
  try {
     console.log("createOrganizer function called");
-    const authUser = (req as any).user;
+    const authUser = req.user;
     if (!authUser || !authUser._id) {
       return res.status(401).json({ message: "Unauthorized" });
     }
