@@ -65,6 +65,7 @@ export const getEvents = async (req: Request, res: Response) => {
   }
 };
 
+
 export const getEventByCategory = async (req: Request, res: Response) => {
   try {
     const { categoryId } = req.params;
