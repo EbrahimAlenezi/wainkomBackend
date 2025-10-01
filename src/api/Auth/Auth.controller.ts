@@ -16,7 +16,7 @@ export const signup = async (req: Request, res: Response) => {
       username,
       email,
       password: hashed,
-      isOrganizer: isOrganizer || true,
+      isOrganizer: isOrganizer,
     });
 
     const token = generatetoken(user, user.username);
