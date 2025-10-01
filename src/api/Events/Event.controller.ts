@@ -2,6 +2,8 @@ import { Request, Response } from "express";
 import { Event } from "../../model/Event";
 import { Org } from "../../model/Organizer";
 import { User } from "../../model/User";
+import { Review } from "../../model/Reviews";
+ 
 // Create Event is Working
 export const createEvent = async (req: Request, res: Response) => {
   try {

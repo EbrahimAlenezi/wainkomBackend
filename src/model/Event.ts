@@ -28,6 +28,9 @@ const EventSchema = new Schema(
     //interactive after event is created
     posts: { type: Schema.Types.ObjectId, ref: "Post" },
     engagements: { type: Schema.Types.ObjectId, ref: "UserEvent" },
+    // ratings summary
+    averageRating: { type: Number, default: 0 },
+    ratingsCount: { type: Number, default: 0 },
   },
   { timestamps: true }
 );
