@@ -6,10 +6,14 @@ import eventRoutes from "./api/Events/Event.router";
 import userRoutes from "./api/User/User.router";
 import categoryRoutes from "./api/Category/Category.router";
 import organizerRoutes from "./api/Organizer/Organizer.router";
+import morgan from "morgan";
+import cors from "cors";
 
 dotenv.config();
 const app = express();
 app.use(express.json());
+app.use(morgan("dev"));
+app.use(cors());
 
 app.use("/api/auth", authRoutes);
 app.use("/api/events", eventRoutes);

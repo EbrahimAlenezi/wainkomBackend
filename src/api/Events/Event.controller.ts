@@ -132,8 +132,11 @@ export const savedEvent = async (req: Request, res: Response) => {
 
 export const getEventById = async (req: Request, res: Response) => {
   try {
-  const { id } = req.params;
-  const event = await Event.findById(id);
+  const { eventId } = req.params;
+  const event = await Event.findById(eventId);
+  if (!event) {
+    return res.status(404).json({ message: "Event not found" });
+  }
   res.status(200).json(event);
   } catch (err) {
     res.status(500).json({ error: err });
