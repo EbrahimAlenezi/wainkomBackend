@@ -6,7 +6,7 @@ import eventRoutes from "./api/Events/Event.router";
 import userRoutes from "./api/User/User.router";
 import categoryRoutes from "./api/Category/Category.router";
 import organizerRoutes from "./api/Organizer/Organizer.router";
-
+import connectDB from "./database";
 dotenv.config();
 const app = express();
 app.use(express.json());
@@ -16,6 +16,6 @@ app.use("/api/events", eventRoutes);
 app.use("/api/user", userRoutes);
 app.use("/api/category", categoryRoutes);
 app.use("/api/organizer", organizerRoutes);
-mongoose.connect(process.env.MONGODB_URI!);
+connectDB();
 
 app.listen(8000, () => console.log("Server running"));

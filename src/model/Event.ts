@@ -1,15 +1,15 @@
-import { Schema, Types, model} from "mongoose";
+import { Schema, Types, model } from "mongoose";
 
 const pointSchema = new Schema({
   type: {
     type: String,
-    enum: ['Point'],
-    required: true
+    enum: ["Point"],
+    required: true,
   },
   coordinates: {
     type: [Number],
-    required: true
-  }
+    required: true,
+  },
 });
 
 const EventSchema = new Schema(
