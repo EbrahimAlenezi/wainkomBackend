@@ -40,6 +40,7 @@ export const login = async (req: Request, res: Response) => {
 
   res.json({ token});
   } catch (err) {
+    console.log(err);
     res.status(500).json({ error: err });
   }
 };
