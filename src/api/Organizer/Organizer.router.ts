@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { createOrganizer, updateOrganizer, getMyOrganizer, assignEventToOrganizer, addEventToOrganizer, removeEventFromOrganizer, updateOrganizerEvents } from "./Organizer.controller";
+import { createOrganizer, updateOrganizer, getMyOrganizer, assignEventToOrganizer, addEventToOrganizer, removeEventFromOrganizer, updateOrganizerEvents, getOrganizer } from "./Organizer.controller";
 import { authorize } from "../../Middleware/authorization";
 
 const organizerRoutes = Router();
@@ -11,6 +11,7 @@ organizerRoutes.use((req, res, next) => {
 });
 
 organizerRoutes.get("/my-profile", authorize, getMyOrganizer);
+organizerRoutes.get("/:id", authorize, getOrganizer);
 organizerRoutes.post("/", authorize, createOrganizer);
 organizerRoutes.put("/:id", authorize, updateOrganizer);
 organizerRoutes.post("/assign-event", authorize, assignEventToOrganizer);

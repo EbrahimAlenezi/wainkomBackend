@@ -10,8 +10,10 @@ const OrgSchema = new Schema(
     image: { type: String, required: true},
     bio: { type: String },
     events: [{ type: Schema.Types.ObjectId, ref: "Event" }],
+    email: { type: String, required: true},
     phone: { type: String, required: true},
     website: { type: String },
+    rating: [{ type: Schema.Types.ObjectId, ref: "Review" }],
   },
   { timestamps: true }
 );  
