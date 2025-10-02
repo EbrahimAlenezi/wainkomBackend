@@ -12,6 +12,6 @@ eventRoutes.put("/:id", authorize, updateEvent);
 eventRoutes.delete("/:id", authorize, deleteEvent);
 eventRoutes.get("/org/:orgId", getEventsByOrg);
 eventRoutes.post("/:eventId/save", savedEvent);
-eventRoutes.get("/:id", getEventById);
+eventRoutes.get("/event/:eventId", getEventById);
 
 export default eventRoutes;

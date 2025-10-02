@@ -1,32 +1,17 @@
+import { User } from '../model/User';
 import { Request, Response, NextFunction } from 'express';
 import jwt from 'jsonwebtoken';
 
-export function authorize(req: Request, res: Response, next: NextFunction) {
-    const header = req.headers.authorization;
-    console.log(header)
-    if (!header) {
-        return res.status(401).json({ message: 'No token provided' });
-    }
-
-    const parts = header.split(' ');
-    if (parts.length !== 2) {
-        return res.status(401).json({ message: 'Invalid auth format' });
-    }
-
-    const [scheme, token] = parts;
-    if (scheme !== 'Bearer' || !token) {
-        return res.status(401).json({ message: 'Invalid auth format' });
-    }
-
+export const authorize = async (req: Request, res: Response, next: NextFunction) => {
+    const token = req.headers.authorization?.split(" ")[1];
+    if (!token) return res.status(401).json({ message: "No token provided" });
     try {
-        const secret = process.env.JWT_Secret;
-        if (!secret) {
-            return res.status(500).json({ message: 'Server misconfigured: missing JWT_Secret' });
-        }
-        const payload = jwt.verify(token, secret);
-        (req as any).user = payload;
-        next();
-    } catch (err) {
-        res.status(401).json({ message: 'Invalid or expired token' });
+      const decoded = jwt.verify(token, process.env.JWT_Secret!) as { _id: string };
+      const user = await User.findById(decoded._id);
+      if (!user) return res.status(401).json({ message: "Invalid token" });
+      req.user = user; // now req.user is typed as UserDoc
+      next();
+    } catch (error) {
+      res.status(401).json({ message: "Unauthorized" });
     }
-}
+  };

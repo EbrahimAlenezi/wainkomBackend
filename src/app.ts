@@ -6,18 +6,23 @@ import eventRoutes from "./api/Events/Event.router";
 import userRoutes from "./api/User/User.router";
 import categoryRoutes from "./api/Category/Category.router";
 import organizerRoutes from "./api/Organizer/Organizer.router";
+
+import reviewRoutes from "./api/Reviews/Reviews.router";
 import morgan from "morgan";
-import engagementRoutes from "./controller/engagement.routes";
+import cors from "cors";
+
 dotenv.config();
 const app = express();
 app.use(express.json());
-app.use(morgan('dev')); 
+app.use(morgan("dev"));
+app.use(cors());
+
 app.use("/api/auth", authRoutes);
 app.use("/api/events", eventRoutes);
 app.use("/api/user", userRoutes);
 app.use("/api/category", categoryRoutes);
 app.use("/api/organizer", organizerRoutes);
-app.use("/api/engagements", engagementRoutes);
+app.use("/api", reviewRoutes);
 
 mongoose.connect(process.env.MONGODB_URI!);
 

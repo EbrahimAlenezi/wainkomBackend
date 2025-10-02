@@ -1,5 +1,4 @@
-import { Schema, model, Types } from "mongoose";
-
+import { Schema, model, Types, HydratedDocument, InferSchemaType } from "mongoose";
 
 
 const UserSchema = new Schema(
@@ -18,17 +17,6 @@ const UserSchema = new Schema(
   { timestamps: true }
 );
 
-interface UserDoc extends Document {
-  username: string;
-  email: string;
-  password: string;
-  image: string;
-  bio: string;
-  phone: string;
-  engagements: Types.ObjectId;
-  posts: Types.ObjectId;
-  organization: Types.ObjectId;
-  isOrganizer: boolean;
-}
-
+export type UserAttrs = InferSchemaType<typeof UserSchema>;
+export type UserDoc = HydratedDocument<UserAttrs>
 export const User = model<UserDoc>("User", UserSchema);

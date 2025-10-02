@@ -11,11 +11,12 @@ export const getUsers = async (req: Request, res: Response) => {
   }
 };
 
-export const getuserById = async (req: Request, res: Response) => {
+
+export const getUserById = async (req: Request, res: Response) => {
   try {
-  const { id } = req.params;
-  const userId = await User.findById(id);
-  res.status(200).json(User);
+    const { userId } = req.params;
+    const user = await User.findById(userId);
+    res.status(200).json(user);
   } catch (err) {
     res.status(500).json({ error: err });
   }
