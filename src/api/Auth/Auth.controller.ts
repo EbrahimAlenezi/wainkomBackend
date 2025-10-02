@@ -16,7 +16,7 @@ export const signup = async (req: Request, res: Response) => {
       username,
       email,
       password: hashed,
-      isOrganizer: isOrganizer || true,
+      isOrganizer: isOrganizer,
     });
 
     const token = generatetoken(user, user.username);
@@ -40,6 +40,7 @@ export const login = async (req: Request, res: Response) => {
 
   res.json({ token});
   } catch (err) {
+    console.log(err);
     res.status(500).json({ error: err });
   }
 };

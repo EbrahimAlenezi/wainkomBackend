@@ -39,6 +39,19 @@ export const createOrganizer = async (req: Request, res: Response) => {
  }
 };
 
+export const getOrganizer = async (req: Request, res: Response) => {
+  try {
+    const { id } = req.params;
+    const organizer = await Org.findById(id);
+    if (!organizer) {
+      return res.status(404).json({ message: "Organizer not found" });
+    }
+    res.status(200).json(organizer);
+  } catch (error) {
+    res.status(500).json({ error: error });
+  }
+};
+
 //working
 export const getMyOrganizer = async (req: Request, res: Response) => {
   try {
@@ -46,7 +59,6 @@ export const getMyOrganizer = async (req: Request, res: Response) => {
     if (!authUser || !authUser._id) {
       return res.status(401).json({ message: "Unauthorized" });
     }
-    
     const user = await User.findById(authUser._id);
     if (!user) {
       return res.status(401).json({ message: "Unauthorized" });
