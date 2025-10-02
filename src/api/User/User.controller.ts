@@ -1,10 +1,21 @@
 import { Request, Response } from "express";
 import { User } from "../../model/User";
+
 /// is done
 export const getUsers = async (req: Request, res: Response) => {
   try {
     const users = await User.find();
     res.status(200).json(users);
+  } catch (err) {
+    res.status(500).json({ error: err });
+  }
+};
+
+export const getuserById = async (req: Request, res: Response) => {
+  try {
+  const { id } = req.params;
+  const userId = await User.findById(id);
+  res.status(200).json(User);
   } catch (err) {
     res.status(500).json({ error: err });
   }
