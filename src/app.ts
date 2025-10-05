@@ -6,7 +6,7 @@ import eventRoutes from "./api/Events/Event.router";
 import userRoutes from "./api/User/User.router";
 import categoryRoutes from "./api/Category/Category.router";
 import organizerRoutes from "./api/Organizer/Organizer.router";
-
+import engagementrouter from "./controller/engagement.routes";
 import reviewRoutes from "./api/Reviews/Reviews.router";
 import morgan from "morgan";
 import cors from "cors";
@@ -23,6 +23,8 @@ app.use("/api/user", userRoutes);
 app.use("/api/category", categoryRoutes);
 app.use("/api/organizer", organizerRoutes);
 app.use("/api", reviewRoutes);
+app.use("/api/engagement", engagementrouter);
+
 
 mongoose.connect(process.env.MONGODB_URI!);
 
