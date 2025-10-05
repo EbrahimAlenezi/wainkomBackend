@@ -21,7 +21,18 @@ export const createOrganizer = async (req: Request, res: Response) => {
       return res.status(403).json({ message: "User is not an organizer" });
     }
     
-    const { name, address, image, bio, phone, website } = req.body;
+    const { name, address, image, bio, phone, website, email } = req.body;
+
+    const missing: string[] = [];
+    if (!name) missing.push("name");
+    if (!address) missing.push("address");
+    if (!image) missing.push("image");
+    if (!phone) missing.push("phone");
+    if (!email) missing.push("email");
+    if (missing.length) {
+      return res.status(400).json({ message: `Missing required fields: ${missing.join(", ")}` });
+    }
+
     const organizer = await Org.create({ 
       owner: authUser._id,
       name, 
@@ -29,7 +40,8 @@ export const createOrganizer = async (req: Request, res: Response) => {
       image, 
       bio, 
       phone, 
-      website 
+      website, 
+      email
     });
     
     await user.updateOne({ $set: { organization: organizer._id } });

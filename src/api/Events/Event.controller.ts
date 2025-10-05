@@ -28,6 +28,16 @@ export const createEvent = async (req: Request, res: Response) => {
       return res.status(403).json({ message: "Organizer profile not found. Please create your organizer profile first." });
     }
 
+    // Enforce organizer profile completeness before publishing events
+    const requiredOrgFields = ["name", "address", "image", "phone", "email"] as const;
+    const missingOrg = requiredOrgFields.filter((key) => !(organizer as any)[key]);
+    if (missingOrg.length) {
+      return res.status(403).json({
+        message: "Complete your organizer profile before publishing events",
+        missing: missingOrg
+      });
+    }
+
 
     const { title, description, image, location, date, time, duration, categoryId } = req.body;
 
@@ -82,7 +92,7 @@ export const createEvent = async (req: Request, res: Response) => {
 // Working
 export const getEvents = async (req: Request, res: Response) => {
   try {
-    const events = await Event.find();
+    const events = await Event.find().populate("orgId", "name image");
     res.status(200).json(events);
   } catch (err) {
     res.status(500).json({ error: err });
@@ -92,7 +102,7 @@ export const getEvents = async (req: Request, res: Response) => {
 export const getEventByCategory = async (req: Request, res: Response) => {
   try {
     const { categoryId } = req.params;
-    const events = await Event.find({ categoryId });
+    const events = await Event.find({ categoryId }).populate("orgId", "name image");
     res.status(200).json(events);
   } catch (err) {
     res.status(500).json({ error: err });
@@ -121,7 +131,7 @@ export const deleteEvent = async (req: Request, res: Response) => {
 // needs testing
 export const getEventsByOrg = async (req: Request, res: Response) => {
   const { orgId } = req.params;
-  const events = await Event.find({ orgId });
+  const events = await Event.find({ orgId }).populate("orgId", "name image");
   res.status(200).json(events);
 }; 
 // needs testing
@@ -135,7 +145,7 @@ export const savedEvent = async (req: Request, res: Response) => {
 export const getEventById = async (req: Request, res: Response) => {
   try {
   const { eventId } = req.params;
-  const event = await Event.findById(eventId);
+  const event = await Event.findById(eventId).populate("orgId", "name image");
   if (!event) {
     return res.status(404).json({ message: "Event not found" });
   }
