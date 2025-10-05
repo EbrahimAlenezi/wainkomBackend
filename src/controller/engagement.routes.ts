@@ -7,10 +7,10 @@ import {
 } from "../controller/engagement.controller";
 import { authorize } from "../Middleware/authorization";
 
-const router = express.Router();
+const engagementrouter = express.Router();
 
-router.post("/",authorize, saveEngagement);
-router.get("/:userId",authorize ,getUserEngagements);
-router.delete("/:id", authorize, removeEngagement);
+engagementrouter.post("/", authorize, saveEngagement);
+engagementrouter.get("/", authorize, getUserEngagements);
+engagementrouter.delete("/:id", authorize, removeEngagement);
 
-export default router;
+export default engagementrouter;

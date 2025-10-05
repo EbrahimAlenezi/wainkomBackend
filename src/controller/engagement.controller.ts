@@ -2,32 +2,45 @@
 import { Request, Response } from "express";
 import { Engagment } from "../model/Engagment"; // مسار الموديل
 import { Event } from "../model/Event";
+import { Types } from "mongoose";
+
 export const saveEngagement = async (req: Request, res: Response) => {
   try {
-    const { userId, eventId } = req.body;
+    const userId = req.user!._id;
+    const { eventId } = req.body;
 
-    // لو محفوظ من قبل ما يتكرر
-    const exists = await Engagment.findOne({ user: userId, event: eventId });
+    // Ensure proper ObjectId type
+    const exists = await Engagment.findOne({
+      user: userId,
+      event: new Types.ObjectId(eventId),
+    });
+
     if (exists) {
-      return res.status(400).json({ message: "Already saved" });
+      // Return the existing document instead of 400
+      return res.status(200).json(exists);
     }
 
-    const engagement = new Engagment({ user: userId, event: eventId });
-    await engagement.save();
+    const engagement = new Engagment({
+      user: userId,
+      event: new Types.ObjectId(eventId),
+    });
 
-    res.status(201).json(engagement);
+    await engagement.save();
+    const populatedEngagement = await engagement.populate("event");
+    res.status(201).json(populatedEngagement);
   } catch (err) {
+    console.error(err);
     res.status(500).json({ error: err });
   }
 };
 
 export const getUserEngagements = async (req: Request, res: Response) => {
   try {
-    const { userId } = req.params;
+    const userId = req.user?.id;
 
-    const engagements = await Engagment.find({ user: userId })
-      .populate("event") // يجيب بيانات الايفنت كاملة
-      .sort({ createdAt: -1 });
+    const engagements = await Engagment.find({ user: userId }).populate(
+      "event"
+    );
 
     res.json(engagements);
   } catch (err) {
