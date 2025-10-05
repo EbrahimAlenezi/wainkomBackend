@@ -21,10 +21,13 @@ export const submitRating = async (req: Request, res: Response) => {
     }
 
     const { eventId } = req.params;
-    const { rating } = req.body;
+    const { rating, text } = req.body;
 
     if (typeof rating !== "number" || rating < 1 || rating > 5) {
       return res.status(400).json({ message: "rating must be a number between 1 and 5" });
+    }
+    if (text && (typeof text !== "string" || text.length > 200)) {
+      return res.status(400).json({ message: "text must be a string up to 200 characters" });
     }
 
     const event = await Event.findById(eventId);
@@ -50,7 +53,7 @@ export const submitRating = async (req: Request, res: Response) => {
       return res.status(409).json({ message: "You have already rated this event" });
     }
 
-    const review = await Review.create({ eventId: event._id, userId: authUser._id, rating });
+    const review = await Review.create({ eventId: event._id, userId: authUser._id, rating, text });
 
     await recomputeEventRating(event._id.toString());
 
@@ -99,3 +102,33 @@ export const getEventRatingSummary = async (req: Request, res: Response) => {
 };
 
 
+export const upsertReviewText = async (req: Request, res: Response) => {
+  try {
+    const authUser = (req as any).user;
+    if (!authUser || !authUser._id) {
+      return res.status(401).json({ message: "Unauthorized" });
+    }
+    const { eventId } = req.params;
+    const { text } = req.body;
+
+    if (text && (typeof text !== "string" || text.length > 200)) {
+      return res.status(400).json({ message: "text must be a string up to 200 characters" });
+    }
+
+    const event = await Event.findById(eventId);
+    if (!event) return res.status(404).json({ message: "Event not found" });
+
+    const review = await Review.findOneAndUpdate(
+      { eventId, userId: authUser._id },
+      { $set: { text: text ?? "" } },
+      { new: true }
+    );
+    if (!review) {
+      return res.status(400).json({ message: "Submit a rating first before adding a text review" });
+    }
+
+    return res.status(200).json(review);
+  } catch (err) {
+    return res.status(500).json({ error: err });
+  }
+};
