@@ -28,15 +28,7 @@ export const createEvent = async (req: Request, res: Response) => {
       return res.status(403).json({ message: "Organizer profile not found. Please create your organizer profile first." });
     }
 
-    // Enforce organizer profile completeness before publishing events
-    const requiredOrgFields = ["name", "address", "image", "phone", "email"] as const;
-    const missingOrg = requiredOrgFields.filter((key) => !(organizer as any)[key]);
-    if (missingOrg.length) {
-      return res.status(403).json({
-        message: "Complete your organizer profile before publishing events",
-        missing: missingOrg
-      });
-    }
+    // Allow creating events even if organizer profile is incomplete
 
 
     const { title, description, image, location, date, time, duration, categoryId } = req.body;
