@@ -7,6 +7,8 @@ const userRoutes = Router();
 
 userRoutes.get("/", getUsers);
 userRoutes.get("/profile/",authorize, getUserById);             // GET /api/user/:userId
+userRoutes.get("/:id", getUserById);
+
 userRoutes.put("/", authorize, upload.single("image"), updateUser);
 userRoutes.delete("/", authorize, deleteUser);
 userRoutes.delete("/all", deleteAllUsers);
