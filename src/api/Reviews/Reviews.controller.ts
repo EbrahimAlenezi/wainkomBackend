@@ -35,16 +35,19 @@ export const submitRating = async (req: Request, res: Response) => {
       return res.status(404).json({ message: "Event not found" });
     }
 
-    // Rating option appears after event date has passed
+    // Rating option appears after the exact event date and time has passed
+    const [hh, mm] = (event.time || "00:00").split(":").map(Number);
+    const eventDateTime = new Date(event.date);
+    eventDateTime.setHours(hh ?? 0, mm ?? 0, 0, 0);
     const now = new Date();
-    if (event.date > now) {
-      return res.status(400).json({ message: "You can rate only after the event date has passed" });
+    if (eventDateTime > now) {
+      return res.status(400).json({ message: "You can rate only after the event time has passed" });
     }
 
-    // Users can only rate events they attended
-    const attended = await Engagment.findOne({ event: event._id, user: authUser._id, attended: true });
-    if (!attended) {
-      return res.status(403).json({ message: "Only attendees can rate this event" });
+    // Users can only rate events they engaged with (no attendance required)
+    const engaged = await Engagment.findOne({ event: event._id, user: authUser._id });
+    if (!engaged) {
+      return res.status(403).json({ message: "Only engaged users can rate this event" });
     }
 
     // Enforce one-time submission: reject if review already exists
