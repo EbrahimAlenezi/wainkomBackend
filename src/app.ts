@@ -10,12 +10,17 @@ import engagementrouter from "./controller/engagement.routes";
 import reviewRoutes from "./api/Reviews/Reviews.router";
 import morgan from "morgan";
 import cors from "cors";
+import path from "path";
 
 dotenv.config();
 const app = express();
+
 app.use(express.json());
 app.use(morgan("dev"));
 app.use(cors());
+
+// serve uploaded files
+app.use("/uploads", express.static(path.join(__dirname, "../uploads")));
 
 app.use("/api/auth", authRoutes);
 app.use("/api/events", eventRoutes);
@@ -24,7 +29,6 @@ app.use("/api/category", categoryRoutes);
 app.use("/api/organizer", organizerRoutes);
 app.use("/api", reviewRoutes);
 app.use("/api/engagement", engagementrouter);
-
 
 mongoose.connect(process.env.MONGODB_URI!);
 
