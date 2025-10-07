@@ -29,6 +29,7 @@ app.use("/api/category", categoryRoutes);
 app.use("/api/organizer", organizerRoutes);
 app.use("/api", reviewRoutes);
 app.use("/api/engagement", engagementrouter);
+// hi
 
 mongoose.connect(process.env.MONGODB_URI!);
 
