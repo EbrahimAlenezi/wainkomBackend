@@ -21,7 +21,7 @@ app.use(cors());
 
 // serve uploaded files
 app.use("/uploads", express.static(path.join(__dirname, "../uploads")));
-
+app.use("/uploads", express.static(path.resolve("uploads")));
 app.use("/api/auth", authRoutes);
 app.use("/api/events", eventRoutes);
 app.use("/api/user", userRoutes);
@@ -29,6 +29,7 @@ app.use("/api/category", categoryRoutes);
 app.use("/api/organizer", organizerRoutes);
 app.use("/api", reviewRoutes);
 app.use("/api/engagement", engagementrouter);
+// hi
 
 mongoose.connect(process.env.MONGODB_URI!);
 

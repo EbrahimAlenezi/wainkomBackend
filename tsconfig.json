@@ -14,12 +14,12 @@
     "types": ["node", "express"],
     "typeRoots": ["./src/@types", "./node_modules/@types", "./types"],
 
-
     // For nodejs:
     // "lib": ["esnext"],
     // "types": ["node"],
     // and npm install -D @types/node
-
+    "rootDir": "./src",
+    "outDir": "./dist",
     // Other Outputs
     "sourceMap": true,
     "declaration": true,
@@ -44,6 +44,6 @@
     "isolatedModules": true,
     "noUncheckedSideEffectImports": true,
     "moduleDetection": "force",
-    "skipLibCheck": true,
+    "skipLibCheck": true
   }
 }
