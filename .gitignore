@@ -157,9 +157,7 @@ Thumbs.db
 *.swp
 
 # Uploaded files (Multer, user images, etc.)
-uploads/
-Uploads/
-public/uploads/
+
 
 # Temporary files
 tmp/
